@@ -282,6 +282,55 @@ int constructStudentsVector(vector<student>& group, string filePath)
     return SUCCESS;
 }
 
+//rewrites the info from group into the file
+int updateFile(vector<student> group, string filePath)
+{
+    if (filePath == "")
+        return INVALID_DATA;
+
+    //delete all contents from the file by opening it in truncate mode
+    ofstream deleteFileContents(filePath, ios::trunc);
+    if (!deleteFileContents.is_open())
+    {
+        return FAIL_TO_OPEN_FILE;
+    }
+    deleteFileContents.close();
+
+    //write each student in the file anew using addStudent
+    int groupSize = group.size();
+    for (int i = 0; i < groupSize; i++)
+    {
+        addStudent(group[i], filePath);
+    }
+
+}
+
+int deleteStudent(string facultyNumber, vector<student>& group, string filePath)
+{
+    //look for the student
+    int groupSize = group.size();
+    int toDeleteIndex = INVALID_DATA;
+
+    for (int i = 0; i < groupSize; i++)
+    {
+        if (facultyNumber.compare(group[i].falcultyNumber) == 0)
+            toDeleteIndex = i;
+    }
+
+    if (toDeleteIndex == INVALID_DATA)
+        return STUDENT_NOT_FOUND;
+
+    //delete student from vector
+    group.erase(group.begin() + toDeleteIndex);
+
+    //write new vector info into the file
+    updateFile(group, filePath);
+
+    return SUCCESS;
+}
+
+
+
 int main()
 {
     //for testing purposes only - will be deleted in the completed project
@@ -300,7 +349,7 @@ int main()
 
     //printStudent(s1);
 
-   // addStudent(s1, PATH_TO_FILE_1);
+   //addStudent(s1, PATH_TO_FILE_1);
 
     subject sub4 = { "English", 5 };
     subject sub5 = { "Discreet Structures", 6 };
@@ -323,7 +372,10 @@ int main()
     vector<student> group1;
     cout << "constructStudentsVector = " << constructStudentsVector(group1, PATH_TO_FILE_1);
     printStudentVector(group1);
-    cout << "Size of group 1 = " << group1.size() << endl;
+    cout << "Size of group 1 = " << group1.size() << endl << endl;
+
+   deleteStudent("2MI0300200", group1, PATH_TO_FILE_1);
+   printStudentVector(group1);
 
 
     return SUCCESS;
