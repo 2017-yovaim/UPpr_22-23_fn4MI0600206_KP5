@@ -33,14 +33,25 @@ const string PATH_TO_FILE_8 = "group8.txt";
 //error codes
 const int SUCCESS = 0;
 const int INVALID_DATA = -1;
-const int FAIL_TO_OPEN_FILE = 1;
-const int STUDENT_NOT_FOUND = 2;
-const int FAIL_TO_CONSTRUCT_SUBJECT_VECTOR = 3;
-const int FAIL_TO_CONSTRUCT_STUDENT_VECTOR = 4;
+const int FAIL_TO_OPEN_FILE = -2;
+const int STUDENT_NOT_FOUND = -3;
+const int FAIL_TO_CONSTRUCT_SUBJECT_VECTOR = -4;
+const int FAIL_TO_CONSTRUCT_STUDENT_VECTOR = -5;
 
 //grade constants
 const int LOWEST_GRADE = 2;
 const int HIGHEST_GRADE = 6;
+
+//command constants
+const int ADD_STUDENT = 1;
+const int DELETE_STUDENT = 2;
+const int PRINT = 3;
+const int SORT = 4;
+const int ASCENDING_FACULTY_NUMBER = 5;
+const int DESCENDING_FACULTY_NUMBER = 6;
+const int ASCENDING_AVERAGE_GRADE = 7;
+const int DESCENDING_AVERAGE_GRADE = 8;
+
 
 //miscellaneous
 const int LINES_IN_FILE_PER_STUDENT = 5;
@@ -145,6 +156,7 @@ int countLinesInFile(string filePath)
 {
     if (filePath == "")
         return INVALID_DATA;
+
     ifstream toRead(filePath);
     if (!toRead.is_open())
     {
@@ -307,6 +319,9 @@ int updateFile(vector<student> group, string filePath)
 
 int deleteStudent(string facultyNumber, vector<student>& group, string filePath)
 {
+    if (facultyNumber == "" || filePath == "" || group.empty())
+        return INVALID_DATA;
+
     //look for the student
     int groupSize = group.size();
     int toDeleteIndex = INVALID_DATA;
@@ -327,6 +342,164 @@ int deleteStudent(string facultyNumber, vector<student>& group, string filePath)
     updateFile(group, filePath);
 
     return SUCCESS;
+}
+
+void swapStudents(student& s1, student& s2)
+{
+    student temp = s1;
+    s1 = s2;
+    s2 = temp;
+}
+
+//sorts the vector in descending order by faculty number
+int sortInDescendingOrderByFacultyNumber(vector<student>& group)
+{
+    if (group.empty())
+        return INVALID_DATA;
+
+    //sort the vector
+    int groupSize = group.size();
+    for (int i = 0; i < groupSize - 1; i++)
+    {
+        for (int j = 0; j < groupSize - i - 1; j++)
+        {
+            if (group[j].falcultyNumber.compare(group[j + 1].falcultyNumber) < 0)
+            {
+                swapStudents(group[j], group[j + 1]);
+            }
+        }
+    }
+
+    return SUCCESS;
+}
+
+//sorts the vector in ascending order by faculty number
+int sortInAscendingOrderByFacultyNumber(vector<student>& group)
+{
+    if (group.empty())
+    {
+        return INVALID_DATA;
+    }
+
+    //sort the vector
+    int groupSize = group.size();
+    for (int i = 0; i < groupSize - 1; i++)
+    {
+        for (int j = 0; j < groupSize - i - 1; j++)
+        {
+            if (group[j].falcultyNumber.compare(group[j + 1].falcultyNumber) > 0)
+            {
+                swapStudents(group[j], group[j + 1]);
+            }
+        }
+    }
+
+    return SUCCESS;
+}
+
+//calculates a student's average grade
+double calculateAverageGrade(student s)
+{
+    double numberOfSubjects = s.subjects.size();
+    if (numberOfSubjects < 1)
+        return INVALID_DATA;
+
+    double sum = 0;
+    double average = 0;
+
+    for (int i = 0; i < numberOfSubjects; i++)
+    {
+        sum += (double)s.subjects[i].grade;
+    }
+
+    average = sum / numberOfSubjects;
+    return average;
+}
+
+//sorts the vector in descending order by average grade
+int sortInDescendingOrderByAverageGrade(vector<student>& group)
+{
+    cout << "Inside sortInDescendingOrderByAverageGrade" << endl;
+
+    if (group.empty())
+        return INVALID_DATA;
+
+    int groupSize = group.size();
+
+    //sort the vector
+    for (int i = 0; i < groupSize - 1; i++)
+    {
+        for (int j = 0; j < groupSize - i - 1; j++)
+        {
+            if (calculateAverageGrade(group[j]) < calculateAverageGrade(group[j + 1]))
+            {
+                swapStudents(group[j], group[j + 1]);
+            }
+        }
+    }
+
+    return SUCCESS;
+}
+
+//sorts the vector in ascending order by average grade
+int sortInAscendingOrderByAverageGrade(vector<student>& group)
+{
+    if (group.empty())
+        return INVALID_DATA;
+
+    int groupSize = group.size();
+
+    //sort the vector
+    for (int i = 0; i < groupSize - 1; i++)
+    {
+        for (int j = 0; j < groupSize - i - 1; j++)
+        {
+            if (calculateAverageGrade(group[j]) > calculateAverageGrade(group[j + 1]))
+            {
+                swapStudents(group[j], group[j + 1]);
+            }
+        }
+    }
+
+    return SUCCESS;
+}
+
+//control function - calls the appropriate sort function based on user input
+//and then updates the file info
+int sort(vector<student>& group, string filePath)
+{
+    if (group.empty() || filePath == "")
+        return INVALID_DATA;
+
+    int action;
+    cin >> action;
+    int result;
+
+    switch (action)
+    {
+    case ASCENDING_FACULTY_NUMBER:
+        result = sortInAscendingOrderByFacultyNumber(group);
+        break;
+    case DESCENDING_FACULTY_NUMBER:
+        result = sortInDescendingOrderByFacultyNumber(group);
+        break;
+    case ASCENDING_AVERAGE_GRADE:
+        result = sortInAscendingOrderByAverageGrade(group);
+        break;
+    case DESCENDING_AVERAGE_GRADE:
+        result = sortInDescendingOrderByAverageGrade(group);
+        break;
+    default:
+        return INVALID_DATA;
+        break;
+    }
+
+    //do not update file if faulty result
+    if (result != SUCCESS)
+        return result;
+
+    updateFile(group, filePath);
+    return result;
 }
 
 
@@ -369,13 +542,45 @@ int main()
     //printStudent(s2);
     //addStudent(s2, PATH_TO_FILE_1);
 
+    subject sub8 = { "Introduction to Programming", 6 };
+    subject sub9 = { "Calculus", 2 };
+
+    student s3;
+    s3.firstName = "Ethan";
+    s3.middleName = "Morris";
+    s3.lastName = "Drum";
+    s3.falcultyNumber = "2MI0300202";
+    s3.subjects.push_back(sub8);
+    s3.subjects.push_back(sub9);
+
+    //addStudent(s3, PATH_TO_FILE_1);
+
+
+
     vector<student> group1;
     cout << "constructStudentsVector = " << constructStudentsVector(group1, PATH_TO_FILE_1);
     printStudentVector(group1);
-    cout << "Size of group 1 = " << group1.size() << endl << endl;
 
-   deleteStudent("2MI0300200", group1, PATH_TO_FILE_1);
-   printStudentVector(group1);
+   // sortInDescendingOrderByFacultyNumber(group1, PATH_TO_FILE_1);
+   // cout << endl << "group1 after sort = ";
+    //printStudentVector(group1);
+
+    //sortInAscendingOrderByFacultyNumber(group1, PATH_TO_FILE_1);
+   // cout << endl << "group1 adter ascending order by faculty number sort = ";
+   // printStudentVector(group1);
+
+    //sortInDescendingOrderByAverageGrade(group1, PATH_TO_FILE_1);
+    //cout << endl << "group1 after descending order by average grade sort = ";
+    //printStudentVector(group1);
+
+    //sortInAscendingOrderByAverageGrade(group1, PATH_TO_FILE_1);
+    //cout << endl << "group1 after ascending order by average grade sort = ";
+    //printStudentVector(group1);
+    
+    sort(group1, PATH_TO_FILE_1);
+    //sortInDescendingOrderByAverageGrade(group1, PATH_TO_FILE_1);
+    cout << endl << "group1 after sort = ";
+    printStudentVector(group1);
 
 
     return SUCCESS;
