@@ -42,7 +42,12 @@ const int FAIL_TO_CONSTRUCT_STUDENT_VECTOR = -5;
 const int LOWEST_GRADE = 2;
 const int HIGHEST_GRADE = 6;
 
+//group constants
+const int FIRST_GROUP = 1;
+const int LAST_GROUP = 8;
+
 //command constants
+const int END = 0;
 const int ADD_STUDENT = 1;
 const int DELETE_STUDENT = 2;
 const int PRINT = 3;
@@ -251,6 +256,10 @@ int constructStudentsVector(vector<student>& group, string filePath)
     //calculates how many iterations are necessary for the file to be read
     //functionally equal to the number of students in a file
     int linesInFile = countLinesInFile(filePath);
+    if (linesInFile == 0)
+    {
+        return SUCCESS; //not a mistake - no info in file is allowed, vector will remain empty
+    }
     linesInFile--; //there is always one extra line in the file as every new student ends their info with a new line
     if (linesInFile % LINES_IN_FILE_PER_STUDENT != 0)
         return INVALID_DATA;
@@ -419,8 +428,6 @@ double calculateAverageGrade(student s)
 //sorts the vector in descending order by average grade
 int sortInDescendingOrderByAverageGrade(vector<student>& group)
 {
-    cout << "Inside sortInDescendingOrderByAverageGrade" << endl;
-
     if (group.empty())
         return INVALID_DATA;
 
@@ -471,8 +478,22 @@ int sort(vector<student>& group, string filePath)
     if (group.empty() || filePath == "")
         return INVALID_DATA;
 
+    cout << "Choose your sort. Please enter " 
+        << endl << ASCENDING_FACULTY_NUMBER << " for ascending order by faculty number, "
+        << endl << DESCENDING_FACULTY_NUMBER << " for descending order by faculty number, "
+        << endl << ASCENDING_AVERAGE_GRADE << " for ascending order by average grade, or "
+        << endl << DESCENDING_AVERAGE_GRADE << " for descending order by average grade.";
+
     int action;
     cin >> action;
+
+    while (action != ASCENDING_AVERAGE_GRADE && action != DESCENDING_AVERAGE_GRADE && action != DESCENDING_FACULTY_NUMBER
+        && action != ASCENDING_FACULTY_NUMBER)
+    {
+        cout << "This is not a valid sorting command. Please enter it again: " << endl;
+        cin >> action;
+    }
+
     int result;
 
     switch (action)
@@ -490,7 +511,7 @@ int sort(vector<student>& group, string filePath)
         result = sortInDescendingOrderByAverageGrade(group);
         break;
     default:
-        return INVALID_DATA;
+        result = INVALID_DATA;
         break;
     }
 
@@ -502,87 +523,335 @@ int sort(vector<student>& group, string filePath)
     return result;
 }
 
+//control function - creates a new student from user input and writes it in the appropriate group vector
+//then calls addStudent to the appropriate file
+int addStudentMenu(vector<student>& group1, vector<student>& group2, vector<student>& group3, vector<student>& group4,
+    vector<student>& group5, vector<student>& group6, vector<student>& group7, vector<student>& group8)
+{
+    student s;
+    subject tempSubject;
+    cout << "Please enter the student's first name: " << endl;
+    getline(cin, s.firstName);
+    cout << "Please enter the student's middle name: " << endl;
+    getline(cin, s.middleName);
+    cout << "Please enter the student's last name: " << endl;
+    getline(cin, s.lastName);
+    cout << "Please enter the student's faculty number: " << endl;
+    getline(cin, s.falcultyNumber);
+
+    cout << "Please enter subjects or enter 0 to stop inputting subjects." << endl;
+    do 
+    {
+        cout << "Please enter your subject's name: " << endl;
+        getline(cin, tempSubject.subjectName);
+        if (tempSubject.subjectName.compare("") == 0)
+        {
+            cout << "That is not a valid subject name." << endl;
+            continue;
+        }
+        if (tempSubject.subjectName.compare("0") == 0)
+            break;
+        cout << "Please enter your subject's grade: " << endl;
+        cin >> tempSubject.grade;
+        cin.ignore();
+        if (tempSubject.grade < LOWEST_GRADE || tempSubject.grade > HIGHEST_GRADE)
+        {
+            cout << "That is not a valid subject grade." << endl;
+            continue;
+        }
+        s.subjects.push_back(tempSubject);
+    } while (tempSubject.subjectName.compare("0") != 0);
+
+    int group;
+    cout << "Please enter the number of the group in which you want to add the student: " << endl;
+    cin >> group;
+
+    while (group < 1 || group > 8)
+    {
+        cout << "That's not a valid group. Please enter again: " << endl;
+        cin >> group;
+    }
+
+    int result = INVALID_DATA;
+
+    switch (group)
+    {
+    case 1:
+        group1.push_back(s);
+        result = addStudent(group1.back(), PATH_TO_FILE_1);
+        break;
+    case 2:
+        group2.push_back(s);
+        result = addStudent(group2.back(), PATH_TO_FILE_2);
+        break;
+    case 3:
+        group3.push_back(s);
+        result = addStudent(group3.back(), PATH_TO_FILE_3);
+        break;
+    case 4:
+        group4.push_back(s);
+        result = addStudent(group4.back(), PATH_TO_FILE_4);
+        break;
+    case 5: 
+        group5.push_back(s);
+        result = addStudent(group5.back(), PATH_TO_FILE_5);
+        break;
+    case 6:
+        group6.push_back(s);
+        result = addStudent(group6.back(), PATH_TO_FILE_6);
+        break;
+    case 7:
+        group7.push_back(s);
+        result = addStudent(group7.back(), PATH_TO_FILE_7);
+        break;
+    case 8: 
+        group8.push_back(s);
+        result = addStudent(group8.back(), PATH_TO_FILE_8);
+        break;
+    default:
+        result = INVALID_DATA;
+        break;
+    }
+
+    return result;
+
+
+}
+
+//control function - asks the user for a group and calls the printStudentVector function for the group
+int printMenu(vector<student> group1, vector<student> group2, vector<student> group3, vector<student> group4,
+    vector<student> group5, vector<student> group6, vector<student> group7, vector<student> group8)
+{
+    cout << "Which group would you like to print on the console? Please enter its number: " << endl;
+    int group;
+    cin >> group;
+    while (group < FIRST_GROUP || group > LAST_GROUP)
+    {
+        cout << "This is not a valid group number. Please enter it again: " << endl;
+        cin >> group;
+    }
+
+    switch (group)
+    {
+    case 1:
+        printStudentVector(group1);
+        break;
+    case 2:
+        printStudentVector(group2);
+        break;
+    case 3:
+        printStudentVector(group3);
+        break;
+    case 4:
+        printStudentVector(group4);
+        break;
+    case 5:
+        printStudentVector(group5);
+        break;
+    case 6:
+        printStudentVector(group6);
+        break;
+    case 7:
+        printStudentVector(group7);
+        break;
+    case 8:
+        printStudentVector(group8);
+        break;
+    default:
+        return INVALID_DATA;
+        break;
+    }
+
+    return SUCCESS;
+}
+
+//control function - calls the sort function for a specific group inputted by the user
+int sortMenu(vector<student>& group1, vector<student>& group2, vector<student>& group3, vector<student>& group4,
+    vector<student>& group5, vector<student>& group6, vector<student>& group7, vector<student>& group8)
+{
+    cout << "Which group would you like to sort? Please enter its number: " << endl;
+    int group;
+    cin >> group;
+    while (group < FIRST_GROUP || group > LAST_GROUP)
+    {
+        cout << "This is not a valid group number. Please enter it again: " << endl;
+        cin >> group;
+    }
+
+    int result = INVALID_DATA;
+
+    switch (group)
+    {
+    case 1:
+        result = sort(group1, PATH_TO_FILE_1);
+        break;
+    case 2:
+        result = sort(group2, PATH_TO_FILE_2);
+        break;
+    case 3:
+        result = sort(group3, PATH_TO_FILE_3);
+        break;
+    case 4:
+        result = sort(group4, PATH_TO_FILE_4);
+        break;
+    case 5:
+        result = sort(group5, PATH_TO_FILE_5);
+        break;
+    case 6:
+        sort(group6, PATH_TO_FILE_6);
+        break;
+    case 7:
+        result = sort(group7, PATH_TO_FILE_7);
+        break;
+    case 8:
+        result = sort(group8, PATH_TO_FILE_8);
+        break;
+    default:
+        result = INVALID_DATA;
+        break;
+    }
+
+    return result;
+}
+
+//control function - calls the deleteStudent function for a specific faculty number and group entered by the user
+int deleteMenu(vector<student>& group1, vector<student>& group2, vector<student>& group3, vector<student>& group4,
+    vector<student>& group5, vector<student>& group6, vector<student>& group7, vector<student>& group8)
+{
+    cout << "Please enter the faculty number of the student you'd like to delete: " << endl;
+    string facultyNumber;
+    getline(cin, facultyNumber);
+    while (facultyNumber.compare("") == 0)
+    {
+        cout << "This is not a valid faculty number. Please enter it again: " << endl;
+        getline(cin, facultyNumber);
+    }
+
+    cout << "Please enter the group of the student: " << endl;
+    int group;
+    cin >> group;
+    while (group < FIRST_GROUP || group > LAST_GROUP)
+    {
+        cout << "This is not a valid group number. Please enter it again: " << endl;
+        cin >> group;
+    }
+
+    int result = INVALID_DATA;
+
+    switch (group)
+    {
+    case 1:
+        result = deleteStudent(facultyNumber, group1, PATH_TO_FILE_1);
+        break;
+    case 2:
+        result = deleteStudent(facultyNumber, group2, PATH_TO_FILE_2);
+        break;
+    case 3:
+        result = deleteStudent(facultyNumber, group3, PATH_TO_FILE_3);
+        break;
+    case 4:
+        result = deleteStudent(facultyNumber, group4, PATH_TO_FILE_4);
+        break;
+    case 5:
+        result = deleteStudent(facultyNumber, group5, PATH_TO_FILE_5);
+        break;
+    case 6:
+        result = deleteStudent(facultyNumber, group6, PATH_TO_FILE_6);
+        break;
+    case 7:
+        result = deleteStudent(facultyNumber, group7, PATH_TO_FILE_7);
+        break;
+    case 8:
+        result = deleteStudent(facultyNumber, group8, PATH_TO_FILE_8);
+        break;
+    default:
+        result = INVALID_DATA;
+        break;
+    }
+
+    return result;
+}
+
+
+//control function - calls to the appropriate action based on user input
+int menu(vector<student>& group1, vector<student>& group2, vector<student>& group3, vector<student>& group4,
+    vector<student>& group5, vector<student>& group6, vector<student>& group7, vector<student>& group8)
+{
+    cout << "Welcome to student information! Choose what you would like to do:" << endl;
+    int action;
+    do
+    {
+        cout << "Please enter " << ADD_STUDENT << " to add a new student, " 
+            << endl << DELETE_STUDENT << " to delete a student, "
+            << endl << PRINT << " to print a group of students on the console, " 
+            << endl << SORT << " to sort a group of students, or "
+            << endl << END << " to end the programme." << endl;
+        cin >> action;
+        if (action == END)
+            break;
+
+        int result = INVALID_DATA;
+        cin.ignore();
+        
+        switch (action)
+        {
+        case ADD_STUDENT:
+            result = addStudentMenu(group1, group2, group3, group4, group5, group6, group7, group8);
+            break;
+        case DELETE_STUDENT:
+            result = deleteMenu(group1, group2, group3, group4, group5, group6, group7, group8);
+            break;
+        case SORT:
+            result = sortMenu(group1, group2, group3, group4, group5, group6, group7, group8);
+            break;
+        case PRINT:
+            result = printMenu(group1, group2, group3, group4, group5, group6, group7, group8);
+            break;
+        default:
+            cout << "Invalid action" << endl;
+            break;
+        }
+
+        if (result == SUCCESS)
+        {
+            cout << "Task completed successfully." << endl;
+        }
+        else
+        {
+            cout << "The programme has encountered a problem." << endl;
+        }
+
+        result = INVALID_DATA;
+    } while (action != END);
+
+    cout << "Thank you for using this programme! Have a good day!" << endl;
+    return SUCCESS;
+}
+
 
 
 int main()
 {
-    //for testing purposes only - will be deleted in the completed project
-    subject sub1 = { "Calculus", 4 };
-    subject sub2 = { "English", 6 };
-    subject sub3 = { "Linear Algebra", 5 };
-
-    student s1;
-    s1.firstName = "Nathan";
-    s1.middleName = "Byrne";
-    s1.lastName = "Edge";
-    s1.falcultyNumber = "2MI0300200"; //sorry if it's somebody's actual falculty number = it's not intentional
-    s1.subjects.push_back(sub1);
-    s1.subjects.push_back(sub2);
-    s1.subjects.push_back(sub3);
-
-    //printStudent(s1);
-
-   //addStudent(s1, PATH_TO_FILE_1);
-
-    subject sub4 = { "English", 5 };
-    subject sub5 = { "Discreet Structures", 6 };
-    subject sub6 = { "Calculus", 5 };
-    subject sub7 = { "Linear Algebra", 3 };
-
-    student s2;
-    s2.firstName = "Annalise";
-    s2.middleName = "Lilly";
-    s2.lastName = "O'Brien";
-    s2.falcultyNumber = "2MI0300201";
-    s2.subjects.push_back(sub4);
-    s2.subjects.push_back(sub5);
-    s2.subjects.push_back(sub6);
-    s2.subjects.push_back(sub7);
-
-    //printStudent(s2);
-    //addStudent(s2, PATH_TO_FILE_1);
-
-    subject sub8 = { "Introduction to Programming", 6 };
-    subject sub9 = { "Calculus", 2 };
-
-    student s3;
-    s3.firstName = "Ethan";
-    s3.middleName = "Morris";
-    s3.lastName = "Drum";
-    s3.falcultyNumber = "2MI0300202";
-    s3.subjects.push_back(sub8);
-    s3.subjects.push_back(sub9);
-
-    //addStudent(s3, PATH_TO_FILE_1);
-
-
-
+    //startup
     vector<student> group1;
-    cout << "constructStudentsVector = " << constructStudentsVector(group1, PATH_TO_FILE_1);
-    printStudentVector(group1);
+    vector<student> group2;
+    vector<student> group3;
+    vector<student> group4;
+    vector<student> group5;
+    vector<student> group6;
+    vector<student> group7;
+    vector<student> group8;
 
-   // sortInDescendingOrderByFacultyNumber(group1, PATH_TO_FILE_1);
-   // cout << endl << "group1 after sort = ";
-    //printStudentVector(group1);
+    constructStudentsVector(group1, PATH_TO_FILE_1);
+    constructStudentsVector(group2, PATH_TO_FILE_2);
+    constructStudentsVector(group3, PATH_TO_FILE_3);
+    constructStudentsVector(group4, PATH_TO_FILE_4);
+    constructStudentsVector(group5, PATH_TO_FILE_5);
+    constructStudentsVector(group6, PATH_TO_FILE_6);
+    constructStudentsVector(group7, PATH_TO_FILE_7);
+    constructStudentsVector(group8, PATH_TO_FILE_8);
 
-    //sortInAscendingOrderByFacultyNumber(group1, PATH_TO_FILE_1);
-   // cout << endl << "group1 adter ascending order by faculty number sort = ";
-   // printStudentVector(group1);
-
-    //sortInDescendingOrderByAverageGrade(group1, PATH_TO_FILE_1);
-    //cout << endl << "group1 after descending order by average grade sort = ";
-    //printStudentVector(group1);
-
-    //sortInAscendingOrderByAverageGrade(group1, PATH_TO_FILE_1);
-    //cout << endl << "group1 after ascending order by average grade sort = ";
-    //printStudentVector(group1);
-    
-    sort(group1, PATH_TO_FILE_1);
-    //sortInDescendingOrderByAverageGrade(group1, PATH_TO_FILE_1);
-    cout << endl << "group1 after sort = ";
-    printStudentVector(group1);
-
+    menu(group1, group2, group3, group4, group5, group6, group7, group8);
 
     return SUCCESS;
-
 }
