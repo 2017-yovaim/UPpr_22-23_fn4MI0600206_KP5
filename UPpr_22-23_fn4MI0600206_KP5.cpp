@@ -56,6 +56,7 @@ const int ASCENDING_FACULTY_NUMBER = 5;
 const int DESCENDING_FACULTY_NUMBER = 6;
 const int ASCENDING_AVERAGE_GRADE = 7;
 const int DESCENDING_AVERAGE_GRADE = 8;
+const int SORT_MULTIPLE = 9;
 
 
 //miscellaneous
@@ -482,7 +483,7 @@ int sort(vector<student>& group, string filePath)
         << endl << ASCENDING_FACULTY_NUMBER << " for ascending order by faculty number, "
         << endl << DESCENDING_FACULTY_NUMBER << " for descending order by faculty number, "
         << endl << ASCENDING_AVERAGE_GRADE << " for ascending order by average grade, or "
-        << endl << DESCENDING_AVERAGE_GRADE << " for descending order by average grade.";
+        << endl << DESCENDING_AVERAGE_GRADE << " for descending order by average grade." << endl;
 
     int action;
     cin >> action;
@@ -772,6 +773,147 @@ int deleteMenu(vector<student>& group1, vector<student>& group2, vector<student>
     return result;
 }
 
+//makes all the values of a bool array false by default
+void initialiseBoolArray(bool* wasAdded, size_t size)
+{
+    for (size_t i = 0; i < size; i++)
+    {
+        wasAdded[i] = false;
+    }
+}
+
+//copies the contents of vector toBeCopied into copyInto
+int copyVector(vector<student>& copyInto, vector<student> toBeCopied)
+{
+    if (toBeCopied.empty())
+        return INVALID_DATA;
+
+    int toBeCopiedSize = toBeCopied.size();
+    for (int i = 0; i < toBeCopiedSize; i++)
+    {
+        copyInto.push_back(toBeCopied[i]);
+    }
+
+    return SUCCESS;
+}
+
+//difference between sortMultipleAndPrint and sortMenu - sortMultipleAndPrint doesn't change any files
+//and prints the vector afterwards
+int sortMultipleAndPrint(vector<student> groups)
+{
+    if (groups.empty())
+        return INVALID_DATA;
+
+    cout << "Choose your sort. Please enter "
+        << endl << ASCENDING_FACULTY_NUMBER << " for ascending order by faculty number, "
+        << endl << DESCENDING_FACULTY_NUMBER << " for descending order by faculty number, "
+        << endl << ASCENDING_AVERAGE_GRADE << " for ascending order by average grade, or "
+        << endl << DESCENDING_AVERAGE_GRADE << " for descending order by average grade." << endl;
+
+    int action;
+    cin >> action;
+
+    while (action != ASCENDING_AVERAGE_GRADE && action != DESCENDING_AVERAGE_GRADE && action != DESCENDING_FACULTY_NUMBER
+        && action != ASCENDING_FACULTY_NUMBER)
+    {
+        cout << "This is not a valid sorting command. Please enter it again: " << endl;
+        cin >> action;
+    }
+
+    int result;
+
+    switch (action)
+    {
+    case ASCENDING_FACULTY_NUMBER:
+        result = sortInAscendingOrderByFacultyNumber(groups);
+        break;
+    case DESCENDING_FACULTY_NUMBER:
+        result = sortInDescendingOrderByFacultyNumber(groups);
+        break;
+    case ASCENDING_AVERAGE_GRADE:
+        result = sortInAscendingOrderByAverageGrade(groups);
+        break;
+    case DESCENDING_AVERAGE_GRADE:
+        result = sortInDescendingOrderByAverageGrade(groups);
+        break;
+    default:
+        result = INVALID_DATA;
+        break;
+    }
+
+    printStudentVector(groups);
+
+    return result;
+}
+
+//control function - makes a vector will all the students from groups the user inputs
+//then sorts and prints the vector
+//does not affect any of the group files
+int sortMultipleMenu(vector<student>& group1, vector<student>& group2, vector<student>& group3, vector<student>& group4,
+    vector<student>& group5, vector<student>& group6, vector<student>& group7, vector<student>& group8)
+{
+    vector<student> multipleGroups;
+    
+    cout << "Please enter the numbers of the groups you'd wish to sort, and then " << END << " to visualize them." << endl;
+    int group;
+    cin >> group;
+    bool wasAdded[LAST_GROUP];
+    initialiseBoolArray(wasAdded, LAST_GROUP);
+    while (group != END)
+    {
+        if (group > LAST_GROUP)
+        {
+            cout << "This is not a valid group number. Please enter it again." << endl;
+            cin >> group;
+            continue;
+        }
+        else if (wasAdded[group - 1] == true)
+        {
+            cout << "You have already added this group. Please enter another one." << endl;
+            cin >> group;
+            continue;
+        }
+        else
+        {
+            wasAdded[group - 1] = true;
+            switch (group)
+            {
+            case 1:
+                copyVector(multipleGroups, group1);
+                break;
+            case 2:
+                copyVector(multipleGroups, group2);
+                break;
+            case 3:
+                copyVector(multipleGroups, group3);
+                break;
+            case 4:
+                copyVector(multipleGroups, group4);
+                break;
+            case 5:
+                copyVector(multipleGroups, group5);
+                break;
+            case 6:
+                copyVector(multipleGroups, group6);
+                break;
+            case 7:
+                copyVector(multipleGroups, group7);
+                break;
+            case 8:
+                copyVector(multipleGroups, group8);
+                break;
+            }
+
+        }
+
+        cin >> group;
+
+    }
+
+    return sortMultipleAndPrint(multipleGroups);
+
+}
+
 
 //control function - calls to the appropriate action based on user input
 int menu(vector<student>& group1, vector<student>& group2, vector<student>& group3, vector<student>& group4,
@@ -784,7 +926,8 @@ int menu(vector<student>& group1, vector<student>& group2, vector<student>& grou
         cout << "Please enter " << ADD_STUDENT << " to add a new student, " 
             << endl << DELETE_STUDENT << " to delete a student, "
             << endl << PRINT << " to print a group of students on the console, " 
-            << endl << SORT << " to sort a group of students, or "
+            << endl << SORT << " to sort a group of students, "
+            << endl << SORT_MULTIPLE << " to sort and visualise multiple groups of students, or "
             << endl << END << " to end the programme." << endl;
         cin >> action;
         if (action == END)
@@ -806,6 +949,9 @@ int menu(vector<student>& group1, vector<student>& group2, vector<student>& grou
             break;
         case PRINT:
             result = printMenu(group1, group2, group3, group4, group5, group6, group7, group8);
+            break;
+        case SORT_MULTIPLE:
+            result = sortMultipleMenu(group1, group2, group3, group4, group5, group6, group7, group8);
             break;
         default:
             cout << "Invalid action" << endl;
