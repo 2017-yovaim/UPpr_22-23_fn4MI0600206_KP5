@@ -136,6 +136,65 @@ bool isNumber(char ch)
     return ch >= '0' && ch <= '9';
 }
 
+//checks if a string is a valid subject name
+//subject names can only have letters and spaces in them
+bool isValidSubjectName(string subjectName)
+{
+    if (subjectName.compare("") == 0)
+        return false;
+
+    int strLen = subjectName.length();
+    for (int i = 0; i < strLen; i++)
+    {
+        if (!isLetter(subjectName[i]) && subjectName[i] != ' ')
+            return false;
+    }
+
+    return true;
+}
+
+//checks if a string is a valid student name
+//student names can only have letters or ' or - or spaces
+bool isValidStudentName(string studentName)
+{
+    if (studentName.compare("") == 0)
+    {
+        return false;
+    }
+
+    int strLen = studentName.length();
+    for (int i = 0; i < strLen; i++)
+    {
+        if (!isLetter(studentName[i]))
+        {
+            if (studentName[i] == '\'' || studentName[i] == '-' || studentName[i] == ' ')
+            {
+                continue;
+            }
+            else
+                return false;
+        }
+    }
+
+    return true;
+}
+
+//checks if a string is a valid file path
+//a file path is valid if it equals one of the file path constants
+bool isValidFilePath(string filePath)
+{
+    if (filePath.compare("") == 0)
+        return false;
+
+    if (!filePath.compare(PATH_TO_FILE_1) && !filePath.compare(PATH_TO_FILE_2)
+        && !filePath.compare(PATH_TO_FILE_3) && !filePath.compare(PATH_TO_FILE_4)
+        && !filePath.compare(PATH_TO_FILE_5) && !filePath.compare(PATH_TO_FILE_6)
+        && !filePath.compare(PATH_TO_FILE_7) && !filePath.compare(PATH_TO_FILE_8))
+        return false;
+
+    return true;
+}
+
 //converts a student's vector of subjects into a single string that will be written in the group file
 string constructStringFromSubjectsVector(string result, vector<subject> subjects)
 {
@@ -165,7 +224,7 @@ string constructStringFromSubjectsVector(string result, vector<subject> subjects
 //counts how many lines are in a file
 int countLinesInFile(string filePath)
 {
-    if (filePath == "")
+    if (filePath.compare("") == 0)
         return INVALID_DATA;
 
     ifstream toRead(filePath);
@@ -190,6 +249,9 @@ int countLinesInFile(string filePath)
 //adds the data from s to the file with path filePath
 int addStudent(student s, string filePath)
 {
+    if (!isValidFilePath(filePath))
+        return INVALID_DATA;
+
     ofstream toAddIn(filePath, ios::app);
     if (!toAddIn.is_open())
     {
@@ -219,7 +281,7 @@ int addStudent(student s, string filePath)
 //takes a string with info about a student's subjects and converts it into a vector<subject>
 int constructSubjectsVector(string subjectsString, vector<subject>& subjects)
 {
-    if (subjectsString == "")
+    if (subjectsString.compare("") == 0)
     {
         return INVALID_DATA;
     }
@@ -259,7 +321,7 @@ int constructSubjectsVector(string subjectsString, vector<subject>& subjects)
 
 int constructStudentsVector(vector<student>& group, string filePath)
 {
-    if (filePath == "")
+    if (!isValidFilePath(filePath))
     {
         return INVALID_DATA;
     }
@@ -317,8 +379,10 @@ int constructStudentsVector(vector<student>& group, string filePath)
 //rewrites the info from group into the file
 int updateFile(vector<student> group, string filePath)
 {
-    if (filePath == "")
+    if (!isValidFilePath(filePath))
+    {
         return INVALID_DATA;
+    }
 
     //delete all contents from the file by opening it in truncate mode
     ofstream deleteFileContents(filePath, ios::trunc);
@@ -341,7 +405,7 @@ int updateFile(vector<student> group, string filePath)
 
 int deleteStudent(string facultyNumber, vector<student>& group, string filePath)
 {
-    if (facultyNumber == "" || filePath == "" || group.empty())
+    if (facultyNumber.compare("") == 0 || !isValidFilePath(filePath) || group.empty())
         return INVALID_DATA;
 
     //look for the student
@@ -488,7 +552,7 @@ int sortInAscendingOrderByAverageGrade(vector<student>& group)
 //and then updates the file info
 int sort(vector<student>& group, string filePath)
 {
-    if (group.empty() || filePath == "")
+    if (group.empty() || !isValidFilePath(filePath))
         return INVALID_DATA;
 
     cout << "Choose your sort. Please enter "
@@ -545,12 +609,34 @@ int addStudentMenu(vector<student>& group1, vector<student>& group2, vector<stud
 {
     student s;
     subject tempSubject;
+
     cout << "Please enter the student's first name: " << endl;
     getline(cin, s.firstName);
+    while (!isValidStudentName(s.firstName))
+    {
+        cout << "This is not a valid first name. Names can only have letters or dashes or apostrophies in them." << endl;
+        cout << " Please enter the student's first name again." << endl;
+        getline(cin, s.firstName);
+    }
+
     cout << "Please enter the student's middle name: " << endl;
     getline(cin, s.middleName);
+    while (!isValidStudentName(s.middleName))
+    {
+        cout << "This is not a valid middle name. Names can only have letters or dashes or apostrophies in them." << endl;
+        cout << " Please enter the student's middle name again." << endl;
+        getline(cin, s.middleName);
+    }
+
     cout << "Please enter the student's last name: " << endl;
     getline(cin, s.lastName);
+    while (!isValidStudentName(s.lastName))
+    {
+        cout << "This is not a valid last name. Names can only have letters or dashes or apostrophies in them." << endl;
+        cout << " Please enter the student's last name again." << endl;
+        getline(cin, s.lastName);
+    }
+
     cout << "Please enter the student's faculty number: " << endl;
     getline(cin, s.falcultyNumber);
 
@@ -559,20 +645,23 @@ int addStudentMenu(vector<student>& group1, vector<student>& group2, vector<stud
     {
         cout << "Please enter your subject's name: " << endl;
         getline(cin, tempSubject.subjectName);
-        if (tempSubject.subjectName.compare("") == 0)
-        {
-            cout << "That is not a valid subject name." << endl;
-            continue;
-        }
         if (tempSubject.subjectName.compare("0") == 0)
             break;
+        while (!isValidSubjectName(tempSubject.subjectName))
+        {
+            cout << "That is not a valid subject name. Subject names can only have letters in them." << endl;
+            cout << "Please enter the subject name again." << endl;
+            getline(cin, tempSubject.subjectName);
+        }
         cout << "Please enter your subject's grade: " << endl;
         cin >> tempSubject.grade;
         cin.ignore();
-        if (tempSubject.grade < LOWEST_GRADE || tempSubject.grade > HIGHEST_GRADE)
+        while (tempSubject.grade < LOWEST_GRADE || tempSubject.grade > HIGHEST_GRADE)
         {
             cout << "That is not a valid subject grade." << endl;
-            continue;
+            cout << "Plase enter the subject grade again." << endl;
+            cin >> tempSubject.grade;
+            cin.ignore();
         }
         s.subjects.push_back(tempSubject);
     } while (tempSubject.subjectName.compare("0") != 0);
@@ -1007,7 +1096,6 @@ int menu(vector<student>& group1, vector<student>& group2, vector<student>& grou
             printErrorMessage(result);
         }
 
-        //result = INVALID_DATA;
     } while (action != END);
 
     cout << "Thank you for using this programme! Have a good day!" << endl;
@@ -1015,11 +1103,9 @@ int menu(vector<student>& group1, vector<student>& group2, vector<student>& grou
 }
 
 
-
 int main()
 {
     //startup
-
     vector<student> group1;
     vector<student> group2;
     vector<student> group3;
