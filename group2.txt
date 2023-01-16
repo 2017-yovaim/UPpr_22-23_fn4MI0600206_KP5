@@ -3,76 +3,51 @@ Annalise
 Cainhurst
 20000
 Algebra 6 Calculus 6
-Alex
-Michael
-Forbes
-22000
-Introduction to Programming 5 Discreet Structures 6 Calculus 3
-Gehrman
-Hunter
-Hunter
-22001
-English 5 Introduction to Programming 3 Calculus 4
-Laurence
-Vicar
-Vicarius
-22003
-English 3 Calculus 6
-Lidwig
-Franc
-Fidzgerald
-22004
-Algebra 5 Discreet Structures 3 English 6
-Adella
-Saint
-Blind
-22005
-Algebra 3 Calculus 4 Discreet Structures 4 Introduction to Programming 5
-Arianna
-Annalise
-Cainhurst
-22006
-Algebra 6 Introduction to Programming 4
-Otto
-Keg
-Otterson
-22007
-Discreet Structures 5 English 4 Calculus 5
 Lucy
 Flora
 Allison
 22008
 Algebra 6 English 6 Discreet Structures 6
-Gratia
-Miller
-Miller
-23000
-Discreet Structures 4 English 4
-Susan
-Bones
-Miller
-23001
-Discreet Structures 4 English 5 Algebra 4
-Archibald
-Archer
-Anderson
-23002
-Discreet Structures 6 English 5 Calculus 6 Algebra 6
-Mildred
-Elizabeth
-Anderson
-23003
-Introduction to Programming 6 Discreet Structures 3 Calculus 4
 James
 Frank
 Winter
 23004
 Algebra 6
-Alice
-Hold
-Held
-23005
-Introduction to Programming 3 English 5
+Petar
+Petrov
+Ivanov
+23010
+English 6 Introduction to Programming 6
+Archibald
+Archer
+Anderson
+23002
+Discreet Structures 6 English 5 Calculus 6 Algebra 6
+Arianna
+Annalise
+Cainhurst
+22006
+Algebra 6 Introduction to Programming 4
+Radomira
+Atanasova
+Radomirova
+23008
+Discreet Structures 5 English 5
+Alex
+Michael
+Forbes
+22000
+Introduction to Programming 5 Discreet Structures 6 Calculus 3
+Lidwig
+Franc
+Fidzgerald
+22004
+Algebra 5 Discreet Structures 3 English 6
+Otto
+Keg
+Otterson
+22007
+Discreet Structures 5 English 4 Calculus 5
 Mod
 Mila
 Ann
@@ -83,18 +58,43 @@ Albertov
 Albertov
 23007
 Discreet Structures 5 English 5 Introduction to Programming 4
-Radomira
-Atanasova
-Radomirova
-23008
-Discreet Structures 5 English 5
+Laurence
+Vicar
+Vicarius
+22003
+English 3 Calculus 6
+Susan
+Bones
+Miller
+23001
+Discreet Structures 4 English 5 Algebra 4
+Mildred
+Elizabeth
+Anderson
+23003
+Introduction to Programming 6 Discreet Structures 3 Calculus 4
 Dimitar
 Ivanov
 Petrov
 23009
 Algebra 4 Discreet Structures 4 Introduction to Programming 5
-Petar
-Petrov
-Ivanov
-23010
-English 6 Introduction to Programming 6
+Gehrman
+Hunter
+Hunter
+22001
+English 5 Introduction to Programming 3 Calculus 4
+Adella
+Saint
+Blind
+22005
+Algebra 3 Calculus 4 Discreet Structures 4 Introduction to Programming 5
+Gratia
+Miller
+Miller
+23000
+Discreet Structures 4 English 4
+Alice
+Hold
+Held
+23005
+Introduction to Programming 3 English 5

@@ -52,11 +52,12 @@ const int ADD_STUDENT = 1;
 const int DELETE_STUDENT = 2;
 const int PRINT = 3;
 const int SORT = 4;
-const int ASCENDING_FACULTY_NUMBER = 5;
-const int DESCENDING_FACULTY_NUMBER = 6;
-const int ASCENDING_AVERAGE_GRADE = 7;
-const int DESCENDING_AVERAGE_GRADE = 8;
-const int SORT_MULTIPLE = 9;
+const int SORT_MULTIPLE = 5;
+const int ASCENDING_FACULTY_NUMBER = 6;
+const int DESCENDING_FACULTY_NUMBER = 7;
+const int ASCENDING_AVERAGE_GRADE = 8;
+const int DESCENDING_AVERAGE_GRADE = 9;
+
 
 
 //miscellaneous
@@ -109,7 +110,6 @@ void printStudentVector(vector<student> group)
     }
 }
 
-//possible optimization - pass result by reference and return an int code message
 char convertFromIntToChar(int grade)
 {
     if (grade < LOWEST_GRADE || grade > HIGHEST_GRADE)
@@ -136,12 +136,17 @@ bool isNumber(char ch)
     return ch >= '0' && ch <= '9';
 }
 
-//--possible optimization - pass result by reference and return an int code message--
 //converts a student's vector of subjects into a single string that will be written in the group file
 string constructStringFromSubjectsVector(string result, vector<subject> subjects)
 {
+    if (subjects.empty())
+    {
+        result = "INVALID_DATA";
+        return result;
+    }
+
     result = "";
-    //if subjects is empty return an error message
+    
     int subjectsSize = subjects.size();
 
     //adds an extra space if the entry isn't the last
@@ -227,7 +232,7 @@ int constructSubjectsVector(string subjectsString, vector<subject>& subjects)
         //if current char is a letter 
         //or it's a space and the next char is a letter and the previous char is not a number
         //then the current char is part of the current subject name
-        if (isLetter(subjectsString[i]) || (subjectsString[i] == ' ' && isLetter(subjectsString[i + 1]) 
+        if (isLetter(subjectsString[i]) || (subjectsString[i] == ' ' && isLetter(subjectsString[i + 1])
             && !isNumber(subjectsString[i - 1])))
         {
             tempSubject.subjectName += subjectsString[i];
@@ -247,13 +252,18 @@ int constructSubjectsVector(string subjectsString, vector<subject>& subjects)
         {
             break;
         }
-           
+
     }
     return SUCCESS;
 }
 
 int constructStudentsVector(vector<student>& group, string filePath)
 {
+    if (filePath == "")
+    {
+        return INVALID_DATA;
+    }
+
     //calculates how many iterations are necessary for the file to be read
     //functionally equal to the number of students in a file
     int linesInFile = countLinesInFile(filePath);
@@ -481,7 +491,7 @@ int sort(vector<student>& group, string filePath)
     if (group.empty() || filePath == "")
         return INVALID_DATA;
 
-    cout << "Choose your sort. Please enter " 
+    cout << "Choose your sort. Please enter "
         << endl << ASCENDING_FACULTY_NUMBER << " for ascending order by faculty number, "
         << endl << DESCENDING_FACULTY_NUMBER << " for descending order by faculty number, "
         << endl << ASCENDING_AVERAGE_GRADE << " for ascending order by average grade, or "
@@ -523,6 +533,8 @@ int sort(vector<student>& group, string filePath)
         return result;
 
     updateFile(group, filePath);
+    cout << "The sorted group is: " << endl;
+    printStudentVector(group);
     return result;
 }
 
@@ -543,7 +555,7 @@ int addStudentMenu(vector<student>& group1, vector<student>& group2, vector<stud
     getline(cin, s.falcultyNumber);
 
     cout << "Please enter subjects or enter 0 to stop inputting subjects." << endl;
-    do 
+    do
     {
         cout << "Please enter your subject's name: " << endl;
         getline(cin, tempSubject.subjectName);
@@ -595,7 +607,7 @@ int addStudentMenu(vector<student>& group1, vector<student>& group2, vector<stud
         group4.push_back(s);
         result = addStudent(group4.back(), PATH_TO_FILE_4);
         break;
-    case 5: 
+    case 5:
         group5.push_back(s);
         result = addStudent(group5.back(), PATH_TO_FILE_5);
         break;
@@ -607,7 +619,7 @@ int addStudentMenu(vector<student>& group1, vector<student>& group2, vector<stud
         group7.push_back(s);
         result = addStudent(group7.back(), PATH_TO_FILE_7);
         break;
-    case 8: 
+    case 8:
         group8.push_back(s);
         result = addStudent(group8.back(), PATH_TO_FILE_8);
         break;
@@ -855,7 +867,7 @@ int sortMultipleMenu(vector<student>& group1, vector<student>& group2, vector<st
     vector<student>& group5, vector<student>& group6, vector<student>& group7, vector<student>& group8)
 {
     vector<student> multipleGroups;
-    
+
     cout << "Please enter the numbers of the groups you'd wish to sort, and then " << END << " to visualize them." << endl;
     int group;
     cin >> group;
@@ -916,6 +928,31 @@ int sortMultipleMenu(vector<student>& group1, vector<student>& group2, vector<st
 
 }
 
+void printErrorMessage(int errorCode)
+{
+    if (errorCode == SUCCESS)
+        return;
+
+    switch (errorCode)
+    {
+    case INVALID_DATA:
+        cout << "Data is invalid." << endl;
+        break;
+    case FAIL_TO_OPEN_FILE:
+        cout << "The programme couldn't open a file." << endl;
+        break;
+    case STUDENT_NOT_FOUND:
+        cout << "The programme couldn't find a student." << endl;
+        break;
+    case FAIL_TO_CONSTRUCT_STUDENT_VECTOR:
+        cout << "The programme couldn't construct a student vector." << endl;
+        break;
+    case FAIL_TO_CONSTRUCT_SUBJECT_VECTOR:
+        cout << "The programme couldn't construct a subject vector." << endl;
+        break;
+    }
+}
+
 
 //control function - calls to the appropriate action based on user input
 int menu(vector<student>& group1, vector<student>& group2, vector<student>& group3, vector<student>& group4,
@@ -925,9 +962,9 @@ int menu(vector<student>& group1, vector<student>& group2, vector<student>& grou
     int action;
     do
     {
-        cout << "Please enter " << ADD_STUDENT << " to add a new student, " 
+        cout << "Please enter " << ADD_STUDENT << " to add a new student, "
             << endl << DELETE_STUDENT << " to delete a student, "
-            << endl << PRINT << " to print a group of students on the console, " 
+            << endl << PRINT << " to print a group of students on the console, "
             << endl << SORT << " to sort a group of students, "
             << endl << SORT_MULTIPLE << " to sort and visualise multiple groups of students, or "
             << endl << END << " to end the programme." << endl;
@@ -938,7 +975,7 @@ int menu(vector<student>& group1, vector<student>& group2, vector<student>& grou
 
         int result = INVALID_DATA;
         cin.ignore();
-        
+
         switch (action)
         {
         case ADD_STUDENT:
@@ -967,7 +1004,7 @@ int menu(vector<student>& group1, vector<student>& group2, vector<student>& grou
         }
         else
         {
-            cout << "The programme has encountered a problem." << endl;
+            printErrorMessage(result);
         }
 
         //result = INVALID_DATA;
@@ -982,7 +1019,7 @@ int menu(vector<student>& group1, vector<student>& group2, vector<student>& grou
 int main()
 {
     //startup
-    
+
     vector<student> group1;
     vector<student> group2;
     vector<student> group3;
@@ -992,17 +1029,65 @@ int main()
     vector<student> group7;
     vector<student> group8;
 
-    constructStudentsVector(group1, PATH_TO_FILE_1);
-    constructStudentsVector(group2, PATH_TO_FILE_2);
-    constructStudentsVector(group3, PATH_TO_FILE_3);
-    constructStudentsVector(group4, PATH_TO_FILE_4);
-    constructStudentsVector(group5, PATH_TO_FILE_5);
-    constructStudentsVector(group6, PATH_TO_FILE_6);
-    constructStudentsVector(group7, PATH_TO_FILE_7);
-    constructStudentsVector(group8, PATH_TO_FILE_8);
+    int constructionResult = 0;
+    constructionResult = constructStudentsVector(group1, PATH_TO_FILE_1);
+    if (constructionResult != SUCCESS)
+    {
+        cout << "The programme has encountered a problem while constructing student vector." << endl;
+        return FAIL_TO_CONSTRUCT_STUDENT_VECTOR;
+    }
+
+    constructionResult = constructStudentsVector(group2, PATH_TO_FILE_2);
+    if (constructionResult != SUCCESS)
+    {
+        cout << "The programme has encountered a problem while constructing student vector." << endl;
+        return FAIL_TO_CONSTRUCT_STUDENT_VECTOR;
+    }
+
+    constructionResult =  constructStudentsVector(group3, PATH_TO_FILE_3);
+    if (constructionResult != SUCCESS)
+    {
+        cout << "The programme has encountered a problem while constructing student vector." << endl;
+        return FAIL_TO_CONSTRUCT_STUDENT_VECTOR;
+    }
+
+    constructionResult = constructStudentsVector(group4, PATH_TO_FILE_4);
+    if (constructionResult != SUCCESS)
+    {
+        cout << "The programme has encountered a problem while constructing student vector." << endl;
+        return FAIL_TO_CONSTRUCT_STUDENT_VECTOR;
+    }
+    
+    constructionResult = constructStudentsVector(group5, PATH_TO_FILE_5);
+    if (constructionResult != SUCCESS)
+    {
+        cout << "The programme has encountered a problem while constructing student vector." << endl;
+        return FAIL_TO_CONSTRUCT_STUDENT_VECTOR;
+    }
+    
+    constructionResult = constructStudentsVector(group6, PATH_TO_FILE_6);
+    if (constructionResult != SUCCESS)
+    {
+        cout << "The programme has encountered a problem while constructing student vector." << endl;
+        return FAIL_TO_CONSTRUCT_STUDENT_VECTOR;
+    }
+
+    constructionResult = constructStudentsVector(group7, PATH_TO_FILE_7);
+    if (constructionResult != SUCCESS)
+    {
+        cout << "The programme has encountered a problem while constructing student vector." << endl;
+        return FAIL_TO_CONSTRUCT_STUDENT_VECTOR;
+    }
+
+    constructionResult = constructStudentsVector(group8, PATH_TO_FILE_8);
+    if (constructionResult != SUCCESS)
+    {
+        cout << "The programme has encountered a problem while constructing student vector." << endl;
+        return FAIL_TO_CONSTRUCT_STUDENT_VECTOR;
+    }
 
     menu(group1, group2, group3, group4, group5, group6, group7, group8);
-    
+
 
     return SUCCESS;
 }
