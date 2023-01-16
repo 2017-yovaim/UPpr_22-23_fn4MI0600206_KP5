@@ -1,5 +1,95 @@
 Nigel
 Malcolm
 Colbie
-3MI0500400
+30000
 English 6 Calculus 6 Introduction to Programming 6
+Bora
+Valley
+Hunter
+30010
+Introduction to Programming 3 Discreet Structures 3 Calculus 4
+Gwen
+Stacy
+Stacy
+30011
+English 4 Calculus 6
+Camille
+Franc
+Borde
+30012
+Algebra 6 Discreet Structures 3 English 6
+Florence
+Saint
+Caselle
+30013
+Algebra 6 Calculus 4 Discreet Structures 4 Introduction to Programming 5
+Ruby
+Diamond
+Miles
+30014
+Algebra 5 Introduction to Programming 5
+Heather
+Duke
+Duke
+30015
+Discreet Structures 6 English 5 Calculus 6
+Heather
+McNamara
+McNamara
+30016
+Algebra 6 English 6 Discreet Structures 6
+Veronica
+Miller
+Sawyer
+30017
+Discreet Structures 5 English 5
+James
+Dean
+Miller
+30018
+Discreet Structures 3 English 5
+Heather
+Chandler
+Chandler
+30019
+Introduction to Programming 2 English 6 Discreet Structures 2
+Martha
+Dunstrock
+Dunstrock
+34001
+English 2 Discreet Structures 4 Calculus 5
+Curt
+Morgan
+Harrison
+34002
+Calculus 6
+Ram
+Bull
+Morrison
+34003
+Introduction to Programming 2 Calculus 2 English 4
+Marty
+Milan
+McFly
+34004
+English 6 Discreet Structures 6 Algebra 6
+Staminir
+Stoinov
+Albertov
+34005
+Discreet Structures 5 English 5 Introduction to Programming 4
+Ekaterina
+Atanasova
+Ivanova
+34006
+Discreet Structures 5 English 5
+Dimitar
+Petrov
+Ivanov
+34007
+Algebra 4 Discreet Structures 4 Introduction to Programming 5
+Anastasia
+Petrova
+Ivanova
+34008
+Algebra 3 English 5 Introduction to Programming 6

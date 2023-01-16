@@ -1,5 +1,95 @@
 Lilly
 Ellie
 Lillith
-7MI0200600
+60000
 Algebra 2 Introduction to Programming 3
+Vasil
+Dimitrov
+Hristov
+60010
+English 5 Introduction to Programming 4 Discreet Structures 4 Calculus 3
+Viktoria
+Tsvetkova
+Atanasova
+60011
+English 6 Calculus 6 Algebra 3
+Atanas
+Ivanov
+Todorov
+60012
+Calculus 4 Discreet Structures 5 English 6
+Dimitar
+Simeonov
+Simeonov
+60013
+Calculus 4 Discreet Structures 4 Introduction to Programming 5
+Teodor
+Lilov
+Lilov
+60014
+Discreet Structures 6 Introduction to Programming 5
+Svetla
+Duhova
+Asenova
+60015
+Discreet Structures 6 English 5 Calculus 6 Algebra 5
+Yasen
+Nikolov
+Yavorov
+60017
+Calculus 6 English 6 Discreet Structures 6
+Yavor
+Hristov
+Ivetov
+60018
+Discreet Structures 6 English 5
+Kristina
+Ivanova
+Dobromirova
+60019
+Discreet Structures 3 English 6 Algebra 6
+Krasimira
+Hristova
+Hristova
+60020
+Introduction to Programming 2 English 5 Discreet Structures 2 Algebra 6
+Kalina
+Dobromirova
+Kusheva
+60021
+English 4 Discreet Structures 5 Calculus 6
+Ivailo
+Robev
+Hutov
+60022
+English 6
+Veselina
+Andreeva
+Andreeva
+60023
+Introduction to Programming 4 Calculus 3 English 6
+Antonia
+Asenova
+Asenova
+60024
+English 6 Discreet Structures 6 Calculus 6
+Kamelia
+Sokolova
+Simeonova
+60025
+Discreet Structures 5 Calculus 4
+Simona
+Dimitrova
+Petkova
+60026
+Discreet Structures 5 English 5
+Boyan
+Yavorov
+Tsvetkov
+60027
+Algebra 6 Discreet Structures 5 Introduction to Programming 5
+Nona
+Yolova
+Mihailova
+60028
+Discreet Structures 6 English 6 Introduction to Programming 6

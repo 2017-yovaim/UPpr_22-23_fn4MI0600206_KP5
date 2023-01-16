@@ -1,10 +1,100 @@
-Nathan
+Jessica
+Idolate
+Head
+11004
+Algebra 2 Calculus 2 Discreet Structures 2 Introduction to Programming 2
+Victor
+Carlson
+Carlson
+11008
+Discreet Structures 3 English 3
+Marcus
 Byrne
 Edge
-2MI0300200
-Calculus 4 English 6 Linear Algebra 5
+11003
+Algebra 4 Discreet Structures 2 English 5
+Trina
+Held
+Held
+12004
+Introduction to Programming 3 Calculus 3 English 5
+Lazar
+Ivanov
+Ivanov
+12008
+Algebra 3 Discreet Structures 4 Introduction to Programming 4
+Odette
+Alice
+Osanne
+11005
+Algebra 5 Introduction to Programming 3
+Mary
+Mary
+Mary
+11007
+Algebra 4 English 4 Discreet Structures 4
+Elsbeth
+Elizabeth
+Anderson
+12002
+Introduction to Programming 6 Discreet Structures 3 Calculus 4
+Connor
+Cole
+Anderson
+12001
+Discreet Structures 6 English 6 Introduction to Programming 2 Algebra 4
+Ivan
+Dimitrov
+Ivanov
+12009
+Algebra 2 English 6 Introduction to Programming 6
 Annalise
 Lilly
 O'Brien
-2MI0300201
+11000
 English 5 Discreet Structures 6 Calculus 5 Linear Algebra 3
+Nathan
+Byrne
+Edge
+10000
+Calculus 4 English 6 Linear Algebra 5
+Madison
+Madeleine
+Miller
+12000
+Discreet Structures 5 English 5 Algebra 5
+Madeleine
+Simone
+Alicent
+12003
+Algebra 5
+Albert
+Albertov
+Albertov
+12006
+Discreet Structures 5 English 5 Introduction to Programming 5
+Rada
+Radova
+Radomirova
+12007
+Discreet Structures 4 English 6
+Gabriel
+Arson
+Boutin
+11001
+English 6 Introduction to Programming 4 Discreet Structures 6 Calculus 5
+Ethan
+Morris
+Group
+11002
+Introduction to Programming 6 Introduction to Programming 5
+Trent
+Carl
+Man
+11006
+Discreet Structures 6 English 5 Calculus 6
+Anna
+Mila
+Mod
+12005
+English 6 Discreet Structures 6 Algebra 6

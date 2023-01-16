@@ -1,5 +1,95 @@
 Michael
 Conan
 Tired
-9MI0300543
+80000
 Algebra 4 English 5
+Anton
+Atanasov
+Antonov
+80001
+English 6 Introduction to Programming 5 Discreet Structures 5 Calculus 3
+Asya
+Grozdeva
+Grozdeva
+80002
+Introduction to Programming 6 Calculus 6 Algebra 6
+Mihail
+Panayotov
+Ivanov
+80003
+Calculus 6 Discreet Structures 6 English 5
+Antonia
+Ignatova
+Ignatova
+80004
+Algebra 4 Calculus 5 Discreet Structures 4 Introduction to Programming 5
+Panayot
+Popov
+Danchev
+80005
+Discreet Structures 6 Introduction to Programming 6
+Elena
+Mancheva
+Maneva
+80006
+Discreet Structures 6 English 5 Calculus 6 Algebra 5
+Bogdan
+Hristov
+Lukov
+80007
+Calculus 4 English 6 Discreet Structures 6
+Zora
+Ganeva
+Galcheva
+80008
+Discreet Structures 5 English 5
+Konstantin
+Dobromirov
+Ivanov
+80009
+Discreet Structures 5 English 6 Algebra 6
+Margarita
+Naydenova
+Nikolova
+80010
+Introduction to Programming 3 English 5 Discreet Structures 2 Algebra 6
+Mladen
+Krustev
+Borisov
+80011
+English 5 Discreet Structures 5 Algebra 5
+Raya
+Robeva
+Kirilova
+80012
+English 4
+Kiril
+Mitev
+Radoslavov
+80013
+Introduction to Programming 5 Calculus 5 English 6
+Plamena
+Kostova
+Angelova
+80014
+Introduction to Programming 3 Discreet Structures 6 Calculus 6
+Momchil
+Sabev
+Sabev
+80015
+Discreet Structures 6 English 4 Calculus 4
+Tsveta
+Gerova
+Peykova
+80016
+Discreet Structures 5 English 5 Algebra 6
+Radoslav
+Hadziev
+Monov
+80017
+Calculus 6 Introduction to Programming 5
+Natalia
+Nedkova
+Nedelcheva
+80018
+Algebra 5 English 4 Introduction to Programming 6

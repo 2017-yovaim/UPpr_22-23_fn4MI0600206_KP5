@@ -1,5 +1,95 @@
 Emily
 Allison
 Brady
-8MI0400321
+70000
 Algebra 3 Discreet Structures 6 English 3
+Hristo
+Atanasov
+Dimitrov
+70001
+English 6 Introduction to Programming 5 Discreet Structures 4 Calculus 3
+Vasilena
+Tikova
+Tikova
+70002
+English 6 Calculus 6 Algebra 6
+Todor
+Ivanov
+Ivanov
+70003
+Calculus 5 Discreet Structures 6 English 5
+Ivelina
+Simeonova
+Simeonova
+70004
+Algebra 5 Calculus 5 Discreet Structures 4 Introduction to Programming 5
+Dimitar
+Dimitrov
+Georgiev
+70005
+Discreet Structures 6 Introduction to Programming 6
+Yoana
+Asenova
+Asenova
+70006
+Discreet Structures 6 English 5 Calculus 6
+Yavor
+Hristov
+Georgiev
+70007
+Calculus 5 English 6 Discreet Structures 6
+Lora
+Ivanova
+Ivetova
+70008
+Discreet Structures 5 English 5
+Kristian
+Ivanov
+Dobromirov
+70009
+Discreet Structures 4 English 6 Algebra 6
+Klara
+Yavorova
+Hristova
+70010
+Introduction to Programming 3 English 5 Discreet Structures 2 Algebra 6
+Kalin
+Krustev
+Krustev
+70011
+English 5 Discreet Structures 5 Calculus 6
+Mina
+Robeva
+Robeva
+70012
+English 5
+Stoyan
+Andreev
+Mitev
+70013
+Introduction to Programming 5 Calculus 4 English 6
+Anna
+Yotova
+Ivanova
+70014
+Introduction to Programming 6 Discreet Structures 6 Calculus 6
+Yosif
+Sokolov
+Dimitrov
+70015
+Discreet Structures 6 Calculus 4
+Maya
+Lilianova
+Petkova
+70016
+Discreet Structures 5 English 5 Algebra 6
+Boris
+Stoyanov
+Stoilov
+70017
+Calculus 6 Discreet Structures 5 Introduction to Programming 5
+Yana
+Mihailova
+Mihailova
+70018
+Algebra 6 English 6 Introduction to Programming 6

@@ -1,5 +1,95 @@
+Mira
+Mihailova
+Mihailova
+50117
+Calculus 6 English 6 Introduction to Programming 6
+Dimitar
+Yavorov
+Tsvetkov
+50116
+Algebra 5 Discreet Structures 5 Introduction to Programming 5
+Simeon
+Atanasov
+Petkov
+50115
+Discreet Structures 6 English 6
+Kalina
+Sokolova
+Simeonova
+50114
+Discreet Structures 5 English 5 Calculus 4
+Alexandrina
+Volova
+Karavelova
+50113
+English 6 Discreet Structures 6 Algebra 6
+Albert
+Andreev
+Andreev
+50112
+Introduction to Programming 3 Calculus 2 English 4
+Hristina
+Robeva
+Robeva
+50111
+English 6
+Martha
+Kusheva
+Kusheva
+50110
+English 3 Discreet Structures 5 Calculus 5
+Ivet
+Liliyanova
+Lilova
+50109
+Introduction to Programming 2 English 6 Discreet Structures 2
+Hriso
+Ivanov
+Dobromirov
+50108
+Discreet Structures 2 English 6 Algebra 6
+Nikolay
+Ivetov
+Hristov
+50107
+Discreet Structures 6 English 5
+Yavor
+Yavorov
+Nikolov
+50106
+Calculus 5 English 6 Discreet Structures 6
+Svetlana
+Asenova
+Duhova
+50105
+Discreet Structures 6 English 5 Calculus 6
+Todor
+Petrov
+Lilov
+50104
+Calculus 6 Introduction to Programming 5
+Dobri
+Ivanov
+Stetlov
+50103
+Algebra 4 Calculus 4 Discreet Structures 4 Introduction to Programming 5
+Lilly
+Marinova
+Todorova
+50102
+Calculus 3 Discreet Structures 4 English 6
+Maria
+Stoyanova
+Tsvetkova
+50101
+English 6 Calculus 6
+Stoyan
+Stoyanov
+Dimitrov
+50100
+English 6 Introduction to Programming 5 Discreet Structures 5 Calculus 4
 Sally
 Collette
 Turner
-2MI0300800
+50000
 English 4 Discreet Structures 5 Introduction to Programming 4 Calculus 5

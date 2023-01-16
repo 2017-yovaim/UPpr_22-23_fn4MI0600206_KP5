@@ -325,6 +325,8 @@ int updateFile(vector<student> group, string filePath)
         addStudent(group[i], filePath);
     }
 
+    return SUCCESS;
+
 }
 
 int deleteStudent(string facultyNumber, vector<student>& group, string filePath)
@@ -929,6 +931,7 @@ int menu(vector<student>& group1, vector<student>& group2, vector<student>& grou
             << endl << SORT << " to sort a group of students, "
             << endl << SORT_MULTIPLE << " to sort and visualise multiple groups of students, or "
             << endl << END << " to end the programme." << endl;
+
         cin >> action;
         if (action == END)
             break;
@@ -967,7 +970,7 @@ int menu(vector<student>& group1, vector<student>& group2, vector<student>& grou
             cout << "The programme has encountered a problem." << endl;
         }
 
-        result = INVALID_DATA;
+        //result = INVALID_DATA;
     } while (action != END);
 
     cout << "Thank you for using this programme! Have a good day!" << endl;
@@ -979,6 +982,7 @@ int menu(vector<student>& group1, vector<student>& group2, vector<student>& grou
 int main()
 {
     //startup
+    
     vector<student> group1;
     vector<student> group2;
     vector<student> group3;
@@ -998,6 +1002,7 @@ int main()
     constructStudentsVector(group8, PATH_TO_FILE_8);
 
     menu(group1, group2, group3, group4, group5, group6, group7, group8);
+    
 
     return SUCCESS;
 }
