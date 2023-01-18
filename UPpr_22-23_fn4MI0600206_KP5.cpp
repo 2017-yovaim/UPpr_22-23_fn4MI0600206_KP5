@@ -1,6 +1,6 @@
 /**
 *
-* Solution to course project #5
+* Solution to course project # 5
 * Introduction to programming course
 * Faculty of Mathematics and Informatics of Sofia University
 * Winter semester 2022/2023
@@ -9,10 +9,37 @@
 * @idnumber 4MI0600206
 * @compiler VC
 *
-* Main programme
+* <Main programme>
 *
 */
 
+/*
+* HOW IT WORKS:
+* Information about the eight groups of students is stored in separate files
+* At the beginning info is converted into members of struct student
+* (which includes in itself members of struct subject)
+* which are then placed into vectors representing the file's group of students
+* all operations are then performed on the vector
+* and the file is rewritten after every change
+* 
+* FILE STRUCTURE:
+* Every file lists the information about the students in the following format:
+* First Name
+* Middle Name
+* Last Name
+* Faculty Number
+* <a string of subjects and grades for the subjects>
+* 
+* As there is a new line after every student, every file has an empty line at the end
+* this is accounted for in the algorithm and should not be changed
+* 
+* FUNCTIONALITIES:
+* 1) printing a group of students (with no sort)
+* 2) adding a student to a group
+* 3) removing a student from a group
+* 4) sorting a group of students
+* 5) sorting and displaying multiple groups of students without changing their files
+*/
 
 #include <iostream>
 #include <vector>
@@ -37,6 +64,7 @@ const int FAIL_TO_OPEN_FILE = -2;
 const int STUDENT_NOT_FOUND = -3;
 const int FAIL_TO_CONSTRUCT_SUBJECT_VECTOR = -4;
 const int FAIL_TO_CONSTRUCT_STUDENT_VECTOR = -5;
+const string INVALID_STRING_DATA = "INVALID DATA";
 
 //grade constants
 const int LOWEST_GRADE = 2;
@@ -58,8 +86,6 @@ const int DESCENDING_FACULTY_NUMBER = 7;
 const int ASCENDING_AVERAGE_GRADE = 8;
 const int DESCENDING_AVERAGE_GRADE = 9;
 
-
-
 //miscellaneous
 const int LINES_IN_FILE_PER_STUDENT = 5;
 
@@ -79,6 +105,7 @@ struct student
 };
 
 //prints a vector of subjects
+//format: <subject name>: <grade><new line>
 void printSubjects(vector<subject> subjects)
 {
     int subjectsSize = subjects.size();
@@ -89,13 +116,14 @@ void printSubjects(vector<subject> subjects)
 }
 
 //prints the data from a member of struct student
+//format: <facultyNumber>: <first name> <middle name> <last name><new line><subjects>
 void printStudent(student s)
 {
     cout << s.falcultyNumber << ": " << s.firstName << " " << s.middleName << " " << s.lastName << endl;
     printSubjects(s.subjects);
 }
 
-//effectively prints all the students of a group, aka the students from a file
+//prints all the students of a vector, aka the students from a file
 void printStudentVector(vector<student> group)
 {
     //not necessarily a mistake - a group can have no students yet
@@ -110,6 +138,19 @@ void printStudentVector(vector<student> group)
     }
 }
 
+//checks if a char is a letter of the Latin alphabet
+bool isLetter(char ch)
+{
+    return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z');
+}
+
+//checks if a char is representing a digit
+bool isNumber(char ch)
+{
+    return ch >= '0' && ch <= '9';
+}
+
+//converts an int grade into a char grade
 char convertFromIntToChar(int grade)
 {
     if (grade < LOWEST_GRADE || grade > HIGHEST_GRADE)
@@ -118,29 +159,20 @@ char convertFromIntToChar(int grade)
     return result;
 }
 
+//converts a char representing a number into a number
 int convertFromCharToInt(char ch)
 {
-    if (ch < '0' || ch > '9')
+    if(!isNumber(ch))
         return INVALID_DATA;
     int result = ch - '0';
     return result;
-}
-
-bool isLetter(char ch)
-{
-    return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z');
-}
-
-bool isNumber(char ch)
-{
-    return ch >= '0' && ch <= '9';
 }
 
 //checks if a string is a valid subject name
 //subject names can only have letters and spaces in them
 bool isValidSubjectName(string subjectName)
 {
-    if (subjectName.compare("") == 0)
+    if (!subjectName.compare(""))
         return false;
 
     int strLen = subjectName.length();
@@ -157,7 +189,7 @@ bool isValidSubjectName(string subjectName)
 //student names can only have letters or ' or - or spaces
 bool isValidStudentName(string studentName)
 {
-    if (studentName.compare("") == 0)
+    if (!studentName.compare(""))
     {
         return false;
     }
@@ -183,7 +215,7 @@ bool isValidStudentName(string studentName)
 //a file path is valid if it equals one of the file path constants
 bool isValidFilePath(string filePath)
 {
-    if (filePath.compare("") == 0)
+    if (!filePath.compare(""))
         return false;
 
     if (!filePath.compare(PATH_TO_FILE_1) && !filePath.compare(PATH_TO_FILE_2)
@@ -195,20 +227,39 @@ bool isValidFilePath(string filePath)
     return true;
 }
 
-//converts a student's vector of subjects into a single string that will be written in the group file
-string constructStringFromSubjectsVector(string result, vector<subject> subjects)
+//checks if a string is a valid faculty number
+//a valid faculty number can only have letters and numbers in it
+bool isValidFacultyNumber(string facultyNumber)
 {
-    if (subjects.empty())
+    if (!facultyNumber.compare(""))
+        return false;
+
+    int len = facultyNumber.length();
+    for (int i = 0; i < len; i++)
     {
-        result = "INVALID_DATA";
-        return result;
+        if (!isNumber(facultyNumber[i]) && !isLetter(facultyNumber[i]))
+        {
+            return false;
+        }
     }
 
-    result = "";
+    return true;
+}
+
+//converts a student's vector of subjects into a single string that will be written in the group file
+//format (repeats until all the subjects are added): 
+//<subject name> <grade>[<space> if the entry isn't the last]
+string constructStringFromSubjectsVector(vector<subject> subjects)
+{
+    string result = "";
+    if (subjects.empty())
+    {
+        result = INVALID_STRING_DATA;
+        return result;
+    }
     
     int subjectsSize = subjects.size();
 
-    //adds an extra space if the entry isn't the last
     for (int i = 0; i < subjectsSize; i++)
     {
         char charGrade = convertFromIntToChar(subjects[i].grade);
@@ -224,7 +275,7 @@ string constructStringFromSubjectsVector(string result, vector<subject> subjects
 //counts how many lines are in a file
 int countLinesInFile(string filePath)
 {
-    if (filePath.compare("") == 0)
+    if (!isValidFilePath(filePath))
         return INVALID_DATA;
 
     ifstream toRead(filePath);
@@ -247,6 +298,7 @@ int countLinesInFile(string filePath)
 }
 
 //adds the data from s to the file with path filePath
+//format is described in main comment above
 int addStudent(student s, string filePath)
 {
     if (!isValidFilePath(filePath))
@@ -267,9 +319,13 @@ int addStudent(student s, string filePath)
     toAddIn << s.falcultyNumber;
     toAddIn << endl;
 
-    //all the subjects of a student are converted into a single string
     string subjectsString;
-    subjectsString = constructStringFromSubjectsVector(subjectsString, s.subjects);
+    subjectsString = constructStringFromSubjectsVector(s.subjects);
+    if (!subjectsString.compare(INVALID_STRING_DATA))
+    {
+        return INVALID_DATA;
+    }
+
     toAddIn << subjectsString;
     toAddIn << endl;
 
@@ -281,7 +337,7 @@ int addStudent(student s, string filePath)
 //takes a string with info about a student's subjects and converts it into a vector<subject>
 int constructSubjectsVector(string subjectsString, vector<subject>& subjects)
 {
-    if (subjectsString.compare("") == 0)
+    if (!subjectsString.compare(""))
     {
         return INVALID_DATA;
     }
@@ -294,8 +350,10 @@ int constructSubjectsVector(string subjectsString, vector<subject>& subjects)
         //if current char is a letter 
         //or it's a space and the next char is a letter and the previous char is not a number
         //then the current char is part of the current subject name
-        if (isLetter(subjectsString[i]) || (subjectsString[i] == ' ' && isLetter(subjectsString[i + 1])
-            && !isNumber(subjectsString[i - 1])))
+        if (isLetter(subjectsString[i]) || 
+            (subjectsString[i] == ' ' &&
+            i < subjectsStringSize - 1 && isLetter(subjectsString[i + 1])
+            && i > 0 && !isNumber(subjectsString[i - 1])))
         {
             tempSubject.subjectName += subjectsString[i];
         }
@@ -319,6 +377,7 @@ int constructSubjectsVector(string subjectsString, vector<subject>& subjects)
     return SUCCESS;
 }
 
+//constructs a vector of students from info in file
 int constructStudentsVector(vector<student>& group, string filePath)
 {
     if (!isValidFilePath(filePath))
@@ -326,12 +385,14 @@ int constructStudentsVector(vector<student>& group, string filePath)
         return INVALID_DATA;
     }
 
+    group.clear();
+
     //calculates how many iterations are necessary for the file to be read
     //functionally equal to the number of students in a file
     int linesInFile = countLinesInFile(filePath);
     if (linesInFile == 0)
     {
-        return SUCCESS; //not a mistake - no info in file is allowed, vector will remain empty
+        return SUCCESS; //not a mistake - file is allowed to have no information, vector will remain empty
     }
     linesInFile--; //there is always one extra line in the file as every new student ends their info with a new line
     if (linesInFile % LINES_IN_FILE_PER_STUDENT != 0)
@@ -339,7 +400,6 @@ int constructStudentsVector(vector<student>& group, string filePath)
 
     int iterationsNecessary = linesInFile / LINES_IN_FILE_PER_STUDENT;
 
-    //in case of file not opening
     ifstream toRead(filePath);
     if (!toRead.is_open())
     {
@@ -358,14 +418,13 @@ int constructStudentsVector(vector<student>& group, string filePath)
         getline(toRead, tempStudent.lastName);
         getline(toRead, tempStudent.falcultyNumber);
 
-        //all the subjects of a student are stored in a single string
-        //the info from it is written in a vector<subject> of struct student
         string subjectsString = "";
         getline(toRead, subjectsString);
         tempStudent.subjects.clear(); //removes info from previous students
         int subjectsResult = constructSubjectsVector(subjectsString, tempStudent.subjects);
         if (subjectsResult != SUCCESS)
         {
+            group.clear();
             return FAIL_TO_CONSTRUCT_SUBJECT_VECTOR;
         }
         group.push_back(tempStudent);
@@ -403,9 +462,10 @@ int updateFile(vector<student> group, string filePath)
 
 }
 
+//deletes student from vector and updates the file
 int deleteStudent(string facultyNumber, vector<student>& group, string filePath)
 {
-    if (facultyNumber.compare("") == 0 || !isValidFilePath(filePath) || group.empty())
+    if (!isValidFacultyNumber(facultyNumber) || !isValidFilePath(filePath) || group.empty())
         return INVALID_DATA;
 
     //look for the student
@@ -425,9 +485,7 @@ int deleteStudent(string facultyNumber, vector<student>& group, string filePath)
     group.erase(group.begin() + toDeleteIndex);
 
     //write new vector info into the file
-    updateFile(group, filePath);
-
-    return SUCCESS;
+    return updateFile(group, filePath);
 }
 
 void swapStudents(student& s1, student& s2)
@@ -443,7 +501,6 @@ int sortInDescendingOrderByFacultyNumber(vector<student>& group)
     if (group.empty())
         return INVALID_DATA;
 
-    //sort the vector
     int groupSize = group.size();
     for (int i = 0; i < groupSize - 1; i++)
     {
@@ -467,7 +524,6 @@ int sortInAscendingOrderByFacultyNumber(vector<student>& group)
         return INVALID_DATA;
     }
 
-    //sort the vector
     int groupSize = group.size();
     for (int i = 0; i < groupSize - 1; i++)
     {
@@ -510,7 +566,6 @@ int sortInDescendingOrderByAverageGrade(vector<student>& group)
 
     int groupSize = group.size();
 
-    //sort the vector
     for (int i = 0; i < groupSize - 1; i++)
     {
         for (int j = 0; j < groupSize - i - 1; j++)
@@ -533,7 +588,6 @@ int sortInAscendingOrderByAverageGrade(vector<student>& group)
 
     int groupSize = group.size();
 
-    //sort the vector
     for (int i = 0; i < groupSize - 1; i++)
     {
         for (int j = 0; j < groupSize - i - 1; j++)
@@ -549,7 +603,7 @@ int sortInAscendingOrderByAverageGrade(vector<student>& group)
 }
 
 //control function - calls the appropriate sort function based on user input
-//and then updates the file info
+//and then updates the file info and prints the sorted vector
 int sort(vector<student>& group, string filePath)
 {
     if (group.empty() || !isValidFilePath(filePath))
@@ -614,8 +668,8 @@ int addStudentMenu(vector<student>& group1, vector<student>& group2, vector<stud
     getline(cin, s.firstName);
     while (!isValidStudentName(s.firstName))
     {
-        cout << "This is not a valid first name. Names can only have letters or dashes or apostrophies in them." << endl;
-        cout << " Please enter the student's first name again." << endl;
+        cout << "This is not a valid first name. Names can only have letters or dashes or apostrophies or spaces in them." << endl;
+        cout << "Please enter the student's first name again." << endl;
         getline(cin, s.firstName);
     }
 
@@ -623,8 +677,8 @@ int addStudentMenu(vector<student>& group1, vector<student>& group2, vector<stud
     getline(cin, s.middleName);
     while (!isValidStudentName(s.middleName))
     {
-        cout << "This is not a valid middle name. Names can only have letters or dashes or apostrophies in them." << endl;
-        cout << " Please enter the student's middle name again." << endl;
+        cout << "This is not a valid middle name. Names can only have letters or dashes or apostrophies or spaces in them." << endl;
+        cout << "Please enter the student's middle name again." << endl;
         getline(cin, s.middleName);
     }
 
@@ -632,30 +686,40 @@ int addStudentMenu(vector<student>& group1, vector<student>& group2, vector<stud
     getline(cin, s.lastName);
     while (!isValidStudentName(s.lastName))
     {
-        cout << "This is not a valid last name. Names can only have letters or dashes or apostrophies in them." << endl;
-        cout << " Please enter the student's last name again." << endl;
+        cout << "This is not a valid last name. Names can only have letters or dashes or apostrophies or spaces in them." << endl;
+        cout << "Please enter the student's last name again." << endl;
         getline(cin, s.lastName);
     }
 
     cout << "Please enter the student's faculty number: " << endl;
     getline(cin, s.falcultyNumber);
+    while (!isValidFacultyNumber(s.falcultyNumber))
+    {
+        cout << "This is not a valid faculty number. Faculty numbers can only have numbers and letters in them." << endl;
+        cout << "Please enter the student's faculty number again: " << endl;
+        getline(cin, s.falcultyNumber);
+    }
 
     cout << "Please enter subjects or enter 0 to stop inputting subjects." << endl;
     do
     {
         cout << "Please enter your subject's name: " << endl;
         getline(cin, tempSubject.subjectName);
+
         if (tempSubject.subjectName.compare("0") == 0)
             break;
+
         while (!isValidSubjectName(tempSubject.subjectName))
         {
             cout << "That is not a valid subject name. Subject names can only have letters in them." << endl;
             cout << "Please enter the subject name again." << endl;
             getline(cin, tempSubject.subjectName);
         }
+
         cout << "Please enter your subject's grade: " << endl;
         cin >> tempSubject.grade;
         cin.ignore();
+
         while (tempSubject.grade < LOWEST_GRADE || tempSubject.grade > HIGHEST_GRADE)
         {
             cout << "That is not a valid subject grade." << endl;
@@ -663,6 +727,7 @@ int addStudentMenu(vector<student>& group1, vector<student>& group2, vector<stud
             cin >> tempSubject.grade;
             cin.ignore();
         }
+
         s.subjects.push_back(tempSubject);
     } while (tempSubject.subjectName.compare("0") != 0);
 
@@ -670,7 +735,7 @@ int addStudentMenu(vector<student>& group1, vector<student>& group2, vector<stud
     cout << "Please enter the number of the group in which you want to add the student: " << endl;
     cin >> group;
 
-    while (group < 1 || group > 8)
+    while (group < FIRST_GROUP || group > LAST_GROUP)
     {
         cout << "That's not a valid group. Please enter again: " << endl;
         cin >> group;
@@ -718,8 +783,6 @@ int addStudentMenu(vector<student>& group1, vector<student>& group2, vector<stud
     }
 
     return result;
-
-
 }
 
 //control function - asks the user for a group and calls the printStudentVector function for the group
@@ -802,7 +865,7 @@ int sortMenu(vector<student>& group1, vector<student>& group2, vector<student>& 
         result = sort(group5, PATH_TO_FILE_5);
         break;
     case 6:
-        sort(group6, PATH_TO_FILE_6);
+        result = sort(group6, PATH_TO_FILE_6);
         break;
     case 7:
         result = sort(group7, PATH_TO_FILE_7);
@@ -825,7 +888,8 @@ int deleteMenu(vector<student>& group1, vector<student>& group2, vector<student>
     cout << "Please enter the faculty number of the student you'd like to delete: " << endl;
     string facultyNumber;
     getline(cin, facultyNumber);
-    while (facultyNumber.compare("") == 0)
+
+    while (!isValidFacultyNumber(facultyNumber))
     {
         cout << "This is not a valid faculty number. Please enter it again: " << endl;
         getline(cin, facultyNumber);
@@ -834,6 +898,7 @@ int deleteMenu(vector<student>& group1, vector<student>& group2, vector<student>
     cout << "Please enter the group of the student: " << endl;
     int group;
     cin >> group;
+
     while (group < FIRST_GROUP || group > LAST_GROUP)
     {
         cout << "This is not a valid group number. Please enter it again: " << endl;
@@ -901,7 +966,6 @@ int copyVector(vector<student>& copyInto, vector<student> toBeCopied)
 }
 
 //difference between sortMultipleAndPrint and sortMenu - sortMultipleAndPrint doesn't change any files
-//and prints the vector afterwards
 int sortMultipleAndPrint(vector<student> groups)
 {
     if (groups.empty())
@@ -916,8 +980,8 @@ int sortMultipleAndPrint(vector<student> groups)
     int action;
     cin >> action;
 
-    while (action != ASCENDING_AVERAGE_GRADE && action != DESCENDING_AVERAGE_GRADE && action != DESCENDING_FACULTY_NUMBER
-        && action != ASCENDING_FACULTY_NUMBER)
+    while (action != ASCENDING_AVERAGE_GRADE && action != DESCENDING_AVERAGE_GRADE 
+           && action != DESCENDING_FACULTY_NUMBER && action != ASCENDING_FACULTY_NUMBER)
     {
         cout << "This is not a valid sorting command. Please enter it again: " << endl;
         cin >> action;
@@ -944,12 +1008,15 @@ int sortMultipleAndPrint(vector<student> groups)
         break;
     }
 
+    if (result == INVALID_DATA)
+        return INVALID_DATA;
+
     printStudentVector(groups);
 
     return result;
 }
 
-//control function - makes a vector will all the students from groups the user inputs
+//control function - makes a vector with all the students from groups the user inputs
 //then sorts and prints the vector
 //does not affect any of the group files
 int sortMultipleMenu(vector<student>& group1, vector<student>& group2, vector<student>& group3, vector<student>& group4,
@@ -964,7 +1031,7 @@ int sortMultipleMenu(vector<student>& group1, vector<student>& group2, vector<st
     initialiseBoolArray(wasAdded, LAST_GROUP);
     while (group != END)
     {
-        if (group > LAST_GROUP)
+        if (group < FIRST_GROUP || group > LAST_GROUP)
         {
             cout << "This is not a valid group number. Please enter it again." << endl;
             cin >> group;
@@ -1016,6 +1083,7 @@ int sortMultipleMenu(vector<student>& group1, vector<student>& group2, vector<st
     return sortMultipleAndPrint(multipleGroups);
 
 }
+
 
 void printErrorMessage(int errorCode)
 {
@@ -1084,7 +1152,7 @@ int menu(vector<student>& group1, vector<student>& group2, vector<student>& grou
             break;
         default:
             cout << "Invalid action" << endl;
-            break;
+            continue;
         }
 
         if (result == SUCCESS)
@@ -1115,60 +1183,60 @@ int main()
     vector<student> group7;
     vector<student> group8;
 
-    int constructionResult = 0;
+    int constructionResult = INVALID_DATA;
     constructionResult = constructStudentsVector(group1, PATH_TO_FILE_1);
     if (constructionResult != SUCCESS)
     {
-        cout << "The programme has encountered a problem while constructing student vector." << endl;
+        cout << "The programme has encountered a problem while constructing student vector 1." << endl;
         return FAIL_TO_CONSTRUCT_STUDENT_VECTOR;
     }
 
     constructionResult = constructStudentsVector(group2, PATH_TO_FILE_2);
     if (constructionResult != SUCCESS)
     {
-        cout << "The programme has encountered a problem while constructing student vector." << endl;
+        cout << "The programme has encountered a problem while constructing student vector 2." << endl;
         return FAIL_TO_CONSTRUCT_STUDENT_VECTOR;
     }
 
     constructionResult =  constructStudentsVector(group3, PATH_TO_FILE_3);
     if (constructionResult != SUCCESS)
     {
-        cout << "The programme has encountered a problem while constructing student vector." << endl;
+        cout << "The programme has encountered a problem while constructing student vector 3." << endl;
         return FAIL_TO_CONSTRUCT_STUDENT_VECTOR;
     }
 
     constructionResult = constructStudentsVector(group4, PATH_TO_FILE_4);
     if (constructionResult != SUCCESS)
     {
-        cout << "The programme has encountered a problem while constructing student vector." << endl;
+        cout << "The programme has encountered a problem while constructing student vector 4." << endl;
         return FAIL_TO_CONSTRUCT_STUDENT_VECTOR;
     }
     
     constructionResult = constructStudentsVector(group5, PATH_TO_FILE_5);
     if (constructionResult != SUCCESS)
     {
-        cout << "The programme has encountered a problem while constructing student vector." << endl;
+        cout << "The programme has encountered a problem while constructing student vector 5." << endl;
         return FAIL_TO_CONSTRUCT_STUDENT_VECTOR;
     }
     
     constructionResult = constructStudentsVector(group6, PATH_TO_FILE_6);
     if (constructionResult != SUCCESS)
     {
-        cout << "The programme has encountered a problem while constructing student vector." << endl;
+        cout << "The programme has encountered a problem while constructing student vector 6." << endl;
         return FAIL_TO_CONSTRUCT_STUDENT_VECTOR;
     }
 
     constructionResult = constructStudentsVector(group7, PATH_TO_FILE_7);
     if (constructionResult != SUCCESS)
     {
-        cout << "The programme has encountered a problem while constructing student vector." << endl;
+        cout << "The programme has encountered a problem while constructing student vector 7." << endl;
         return FAIL_TO_CONSTRUCT_STUDENT_VECTOR;
     }
 
     constructionResult = constructStudentsVector(group8, PATH_TO_FILE_8);
     if (constructionResult != SUCCESS)
     {
-        cout << "The programme has encountered a problem while constructing student vector." << endl;
+        cout << "The programme has encountered a problem while constructing student vector 8." << endl;
         return FAIL_TO_CONSTRUCT_STUDENT_VECTOR;
     }
 
